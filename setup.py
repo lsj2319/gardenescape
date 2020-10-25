@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="lsj2319-gescape", # Replace with your own username
-    version="0.0.1",
+    version="0.0.2",
     author="Lee Jordan",
     author_email="hi@leesjordan.net",
     description="Plant flowers and scrubs in a relaxing virtual garden",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/lsj2319/Garden-Escape-Python-Project",
+    url="https://github.com/lsj2319/gardenescape",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
