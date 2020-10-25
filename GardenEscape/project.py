@@ -67,7 +67,7 @@ def mouse_move(e,canvas):
 
 def game_heading(canvas):
     #load the welcome and instruction text for the game
-    welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#587732", font=("Arial", 36))
+    welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#f2f1f1", font=("Arial", 36))
     message_text = canvas.create_text(400, 50, text="Use your mouse to move. use spacebar to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
 
 # make a shrub
