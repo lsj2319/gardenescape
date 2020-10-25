@@ -2,27 +2,15 @@
 File: project.py
 ----------------
 Garden Escape: A relaxing time in a garden
-- use image as a game character
-- randomly generate colors
-- plant flowers or shrubs
-- move the Gardener game character with a mouse
+- use image as a game character - randomly generate colors - plant flowers or shrubs - move the Gardener game character with a mouse
 Current status: milestone 1
 """
 
 import tkinter
-from _ast import Lambda
 
-from simpleimage import SimpleImage
-from tkinter import messagebox
-from tkinter import Label
-from tkinter import font
-from tkinter import Frame
 from tkinter import Button
-from tkinter import simpledialog
 from PIL import ImageTk, Image
-import time
 import random
-import math
 
 #constants
 CANVAS_WIDTH = 800      # Width of drawing canvas in pixels
@@ -32,23 +20,49 @@ CANVAS_BACKGROUND = "#51bc82"
 def main():
     canvas = make_canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Garden Escape")
     #add a default background image
-    bg_image = Image.open("images/bg/python-is-fun.png")
+    bg_image = Image.open("../images/bg/python-is-fun.png")
     backgroundImage=ImageTk.PhotoImage(bg_image)
     canvas.create_image(10, 10, image=backgroundImage, anchor="nw")
 
-# event binds
+#event binds
     canvas.bind("<space>", lambda e: plant_flower(e, canvas))
     canvas.bind("<Double-1>", lambda e: plant_shrub(e, canvas))
     canvas.bind("<Motion>", lambda e: mouse_move(e,canvas))
     #canvas.bind("<Key>", lambda event: key_pressed(event, canvas))
     canvas.focus_set()  # Canvas now has the keyboard focus
-    # print the welcome message and title of the game
     game_heading(canvas)
+    # testing background changer, had it in a function but having issues with command calls
+    # create a list to hold options for drop down
+    bgclicked = tkinter.StringVar()
+    BgOptions = ["relaxing-green",
+                 "python-is-fun",
+                 "geometric-garden",
+                 "basic-garden"
+                 ]
+    # the second background is chosen by default
+    #bgclicked.trace_add('write', lambda *args: print(bgclicked.get()))
+    #bgclicked.set(BgOptions[1])
+    #bgclicked.trace("drop_bg", choose)
+    # create a label title for the drop down menu
+    # tkinter.Label(canvas, text="Choose a Garden Background", bg="#51bc82").place(x=200, y=10)
+    drop_bg = tkinter.OptionMenu(canvas, bgclicked, *BgOptions)
+    drop_bg.place(x=300, y=70)
+    bgclicked.set(BgOptions[1])
+    selection = str(bgclicked.get())
+
+    print(selection)
+    # drop_bg.pack()
+    # create a button to activate the background change
+    bg_button = Button(canvas, text="OK", command=lambda : choose())
+    bg_button.place(x=560, y=70)
+    # takes the background image option menu value and applies it to the background image attribute of the canvas
+
+    # end backround changer
+    #change_my_background(canvas)
 
     canvas.mainloop()
 
 ########## functions #########
- # refactor so use a radio box and keypress to plant a flower?
 def plant_flower(event, canvas):
     make_flower(canvas)
 
@@ -60,15 +74,48 @@ def mouse_move(e,canvas):
     #global to prevent tkinter image bug
     global img
     #add gardener charcter image to Canvas and move with mouse
-    img = ImageTk.PhotoImage(file="images/retro-gardener-sm.png")
-    gardener_img = canvas.create_image(e.x, e.y, image=img, anchor="center")
+    img = ImageTk.PhotoImage(file="../images/retro-gardener-sm.png")
+    gardener_img = canvas.create_image(e.x, e.y, image=img)
     #my_label.config(text="Coordinates x:" + str(e.x) + " y:" + str(e.y))
 
+
+def change_my_background(canvas):
+    #create a list to hold options for drop down
+    BgOptions = ["relaxing-green",
+                  "python-is-fun",
+                  "geometric-garden",
+                  "basic-garden"
+    ]
+    # the second background is chosen by default
+    bgclicked = tkinter.StringVar()
+    bgclicked.set(BgOptions[1])
+    # create a label title for the drop down menu
+    #tkinter.Label(canvas, text="Choose a Garden Background", bg="#51bc82").place(x=200, y=10)
+    drop_bg = tkinter.OptionMenu(canvas, bgclicked, *BgOptions)
+    drop_bg.place(x=300, y=70)
+    #drop_bg.pack()
+    # create a button to activate the background change
+    bg_button = Button(canvas, text ="OK", command=choose)
+    bg_button.place(x=560, y=70)
+#takes the background image option menu value and applies it to the background image attribute of the canvas
+
+def choose(selection):
+    print(selection)
+    selection.trace_add('write', lambda *args: print(selection.get()))
+   # print("user chose the value {}".format(bgclicked.get()))
+
+    #global mybackground
+    # prints the value to the canvas for testing
+    #mybackground = bgclicked.get()
+    #x = str(x)
+    #mylabel.config(text=x)
+    #mylabel = tkinter.Label(master, text=value.get()).place(x=200, y=100)
+    #for some reason this is called first without being called?
 
 def game_heading(canvas):
     #load the welcome and instruction text for the game
     welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#587732", font=("Arial", 36))
-    message_text = canvas.create_text(400, 50, text="Use your mouse to move. use spacebar to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
+    message_text = canvas.create_text(400, 50, text="Use your mouse to move. Left click to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
 
 # make a shrub
 def make_shrub(canvas):
@@ -76,8 +123,8 @@ def make_shrub(canvas):
     rect_side = 60
     color = random.choice(["#028A0F", "#369b64", "#5dbb63"])
     # shrub will be planted at mouse location
-    point_x1 = (canvas.winfo_pointerx() - canvas.winfo_rootx()) - 30
-    point_y1 = (canvas.winfo_pointery() - canvas.winfo_rooty()) - 30
+    point_x1 = canvas.winfo_pointerx() - canvas.winfo_rootx()
+    point_y1 = canvas.winfo_pointery() - canvas.winfo_rooty()
     # create a shrub
     #canvas.create_rectangle(200, 20, SHRUB_SIZE, SHRUB_SIZE, fill=SHRUB_COLOR, outline=SHRUB_COLOR)"
     canvas.create_rectangle(point_x1, point_y1, point_x1 + rect_side, point_y1 + rect_side, fill=color, outline=color)
@@ -87,8 +134,8 @@ def make_flower(canvas):
     diameter = 30
     color = random.choice(['#F7EF99','#FF70A6', '#FF9770', '#70D6FF'])
     #flower (oval shape) will be planted at mouse location
-    point_x1 = (canvas.winfo_pointerx() - canvas.winfo_rootx()) - 15
-    point_y1 = (canvas.winfo_pointery() - canvas.winfo_rooty()) - 15
+    point_x1 = canvas.winfo_pointerx() - canvas.winfo_rootx()
+    point_y1 = canvas.winfo_pointery() - canvas.winfo_rooty()
     # create the flower
     canvas.create_oval(point_x1, point_y1, point_x1 + diameter, point_y1 + diameter, fill=color, outline=color)
 
@@ -127,7 +174,7 @@ def get_file():
     # use the default file
     filename = DEFAULT_FILE
     return filename
-"""
+
 def mouse_pressed(event, canvas):
     print('mouse pressed', event.x, event.y)
     x = event.x
@@ -135,7 +182,7 @@ def mouse_pressed(event, canvas):
     found = canvas.find_overlapping(x, y, x, y)
     if len(found) > 0:
         canvas.delete(found[-1])
-"""
+
 ######## DO NOT MODIFY ANY CODE BELOW THIS LINE ###########
 
 # This function is provided to you and should not be modified.

@@ -2,126 +2,106 @@
 File: project.py
 ----------------
 Garden Escape: A relaxing time in a garden
-- use image as a game character - randomly generate colors - plant flowers or shrubs - move the Gardener game character with a mouse
-Current status: milestone 1
+- use image as a game character
+- randomly generate colors
+- plant flowers or shrubs
+- move the Gardener game character with a mouse
 """
 
 import tkinter
-from tkinter.ttk import *
-from _ast import Lambda
-from doctest import master
-
-from simpleimage import SimpleImage
-from tkinter import messagebox
 from tkinter import Label
-from tkinter import font
-from tkinter import Frame
-from tkinter import Button
-from tkinter import OptionMenu
-from tkinter import simpledialog
 from PIL import ImageTk, Image
-import time
 import random
-import math
 
 #constants
-CANVAS_WIDTH = 800      # Width of drawing canvas in pixels
-CANVAS_HEIGHT = 600     # Height of drawing canvas in pixels
+CANVAS_WIDTH = 1000      # Width of drawing canvas in pixels
+CANVAS_HEIGHT = 800     # Height of drawing canvas in pixels
 CANVAS_BACKGROUND = "#51bc82"
 
 def main():
+
     canvas = make_canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Garden Escape")
     #add a default background image
-    bg_image = Image.open("images/bg/python-is-fun.png")
-    backgroundImage=ImageTk.PhotoImage(bg_image)
+    image = Image.open("images/bg/garden-bg-02.png")
+    backgroundImage=ImageTk.PhotoImage(image)
     canvas.create_image(10, 10, image=backgroundImage, anchor="nw")
 
-#event binds
-    canvas.bind("<space>", lambda e: plant_flower(e, canvas))
-    canvas.bind("<Double-1>", lambda e: plant_shrub(e, canvas))
+#canvas.bind("<Button-1>", lambda e: plant_flower(e, canvas))
+    #canvas.bind("<Double-1>", lambda e: plant_shrub(e, canvas))
     canvas.bind("<Motion>", lambda e: mouse_move(e,canvas))
-    #canvas.bind("<Key>", lambda event: key_pressed(event, canvas))
+    #canvas.bind("<space>", lambda e: space_pressed(e,canvas))
     canvas.focus_set()  # Canvas now has the keyboard focus
     game_heading(canvas)
-    # testing background changer, had it in a function but having issues with command calls
-    # create a list to hold options for drop down
-    combo = Combobox(canvas)
-
-    # the second background is chosen by default
-    combo['values'] = ("relaxing-green",
-                 "python-is-fun",
-                 "geometric-garden",
-                 "basic-garden")
-
-    combo.current(0)  # set the selected item
-    # create a label title for the drop down menu
-    # tkinter.Label(canvas, text="Choose a Garden Background", bg="#51bc82").place(x=200, y=10)
-    combo.place(x=300, y=70)
-    #mylabel = tkinter.Label(canvas, text=combo.get()).place(x=200, y=100)
-    print(combo.get())
-    # drop_bg.pack()
-    # create a button to activate the background change
-    bg_button = Button(canvas, text="OK", command=choose)
-    bg_button.place(x=560, y=70)
-    # takes the background image option menu value and applies it to the background image attribute of the canvas
-
-    # end backround changer
-    #change_my_background(canvas)
+    #garden_item(canvas)
+   # messagebox.showinfo("Hi", "Hello Gardeners!")
 
     canvas.mainloop()
 
 ########## functions #########
-def plant_flower(event, canvas):
-    make_flower(canvas)
-
-def plant_shrub(event, canvas):
-    make_shrub(canvas)
+"""def plant_flower(e, canvas):
+    if space_pressed(e,canvas):
+        make_flower(canvas)"""
 # capture mouse motion events and use them
 def mouse_move(e,canvas):
     #x and y coordinates move as mouse does: e.x, #e.y
     #global to prevent tkinter image bug
     global img
     #add gardener charcter image to Canvas and move with mouse
-    img = ImageTk.PhotoImage(file="images/retro-gardener-sm.png")
+    img = ImageTk.PhotoImage(file="../images/retro-gardener-sm.png")
     gardener_img = canvas.create_image(e.x, e.y, image=img)
     #my_label.config(text="Coordinates x:" + str(e.x) + " y:" + str(e.y))
 
-
-def change_my_background(canvas):
-    #create a list to hold options for drop down
-    BgOptions = ["relaxing-green",
-                  "python-is-fun",
-                  "geometric-garden",
-                  "basic-garden"
-    ]
-    # the second background is chosen by default
-    bgclicked = tkinter.StringVar()
-    bgclicked.set(BgOptions[0])
-    # create a label title for the drop down menu
-    #tkinter.Label(canvas, text="Choose a Garden Background", bg="#51bc82").place(x=200, y=10)
-    drop_bg = tkinter.OptionMenu(canvas, bgclicked, *BgOptions)
-    drop_bg.place(x=300, y=70)
-    #drop_bg.pack()
-    # create a button to activate the background change
-    bg_button = Button(canvas, text ="OK", command=choose)
-    bg_button.place(x=560, y=70)
-#takes the background image option menu value and applies it to the background image attribute of the canvas
-
-def choose():
-
-    # prints the value to the canvas for testing
-    mybackground = combo.get()
-    combo.get()
-    #x = str(x)
-    #mylabel.config(text=x)
-   # mylabel = tkinter.Label(master, text=bgclicked.get()).place(x=200, y=100)
-    #for some reason this is called first without being called?
-    print("clicked")
+# key presses for activity ### is another function needed?
+def space_pressed(e,canvas):
+    # what happens? first confirm it happened
+    print("spacebar pressed")
 
 def game_heading(canvas):
     #load the welcome and instruction text for the game
-    welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#587732", font=("Arial", 36))
-    message_text = canvas.create_text(400, 50, text="Use your mouse to move. Left click to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
+    welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#587732", font=("Arial", 20))
+    message_text = canvas.create_text(400, 40, text="Use your mouse to move. Left click to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
+"""
+
+def garden_item(canvas):
+    selected = tkinter.IntVar()
+    selected.set("1")
+
+    #tkinter.Radiobutton(canvas, text="Plant Flowers", variable=selected, value=1, bg=CANVAS_BACKGROUND, command=lambda e: clicked(e, get(selected))).place(x=850, y=20)
+    tkinter.Radiobutton(canvas, text="Plant Flowers",variable=selected, value=1, bg=CANVAS_BACKGROUND).place(x=850, y=20)
+    tkinter.Radiobutton(canvas, text="Place Rocks", variable=selected,  value=2, bg=CANVAS_BACKGROUND).place(x=850, y=50)
+    tkinter.Radiobutton(canvas, text="Plant Shrubs", variable=selected, value=3, bg=CANVAS_BACKGROUND).place(x=850, y=80)
+    tkinter.Radiobutton(canvas, text="Build Path", variable=selected, value=4, bg=CANVAS_BACKGROUND).place(x=850, y=100)
+
+    #item_label = Label(canvas, text=selected.get())
+    item_btn = Button(canvas, text="Choose activity", command=lambda: clicked(selected.get(), canvas))
+    item_btn.place(x=850, y=130)
+"""
+
+
+def show(value, canvas):
+    myLabel = Label(canvas, text=clicked_ddn.get()).place(x=100, y=100)
+
+#get the radio button selection
+def clicked(value, canvas):
+
+    if value ==1:
+        #call flower press action which will call make_flower # while value==1:
+        for i in range(20):
+            make_flower(canvas)
+        #plant_flower()
+            p_text = canvas.create_text(400, 70, text="Let's plant flowers!", fill="#f2f1f1", font=("Arial", 16))
+        # if spacebar is pressed while value is 1, make flower
+
+    elif value == 2:
+        # display different text if rocks were chosen
+        p_text = canvas.create_text(400, 70, text="Let's place rocks!", fill="#f2f1f1", font=("Arial", 16))
+        #make_rock(canvas)
+    elif value == 3:
+        p_text = canvas.create_text(400, 70, text="Let's plant shrubs!", fill="#f2f1f1", font=("Arial", 16))
+        #make_shrub(canvas)
+    elif value == 4:
+        p_text = canvas.create_text(400, 70, text="Let's make a garden path", fill="#f2f1f1", font=("Arial", 16))
+        #make_pathway(canvas)
 
 # make a shrub
 def make_shrub(canvas):
@@ -134,6 +114,20 @@ def make_shrub(canvas):
     # create a shrub
     #canvas.create_rectangle(200, 20, SHRUB_SIZE, SHRUB_SIZE, fill=SHRUB_COLOR, outline=SHRUB_COLOR)"
     canvas.create_rectangle(point_x1, point_y1, point_x1 + rect_side, point_y1 + rect_side, fill=color, outline=color)
+
+
+# make a rock
+def make_rock(canvas):
+    # set diameter and randomize the color of the flower
+    #diameter = 30
+    diameter = random.choice([20, 40, 60, 80, 120, 200])
+    color = random.choice(['#648381', '#333333', '#999999', '#f2f1f1'])
+    # rock (oval shape) will be planted at mouse location
+    point_x1 = canvas.winfo_pointerx() - canvas.winfo_rootx()
+    point_y1 = canvas.winfo_pointery() - canvas.winfo_rooty()
+    # create the rock
+    canvas.create_oval(point_x1, point_y1, point_x1 + diameter, point_y1 + diameter, fill=color, outline=color)
+
 # make a flower
 def make_flower(canvas):
 # set diameter and randomize the color of the flower
@@ -145,7 +139,7 @@ def make_flower(canvas):
     # create the flower
     canvas.create_oval(point_x1, point_y1, point_x1 + diameter, point_y1 + diameter, fill=color, outline=color)
 
-def start_pathway(canvas):
+def make_pathway(canvas):
     #adding a pathway - work in progress
     point_x1 = canvas.winfo_pointerx() - canvas.winfo_rootx()
     point_y1 = canvas.winfo_pointery() - canvas.winfo_rooty()

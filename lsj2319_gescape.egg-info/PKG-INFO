@@ -1,0 +1,24 @@
+Metadata-Version: 1.2
+Name: lsj2319-gescape
+Version: 0.0.1
+Summary: Plant flowers and scrubs in a relaxing virtual garden
+Home-page: https://github.com/lsj2319/Garden-Escape-Python-Project
+Author: Lee Jordan
+Author-email: hi@leesjordan.net
+License: UNKNOWN
+Description: # Garden Escape
+        
+        Garden Escape was my final beginner project for Code in Place 2020. 
+        It is a Gardening simulation game using tKinter for the GUI. 
+        ## How to Play
+        Use the mouse to move the gardener character. 
+        Press spacebar or doubleclick to plant flowers or shrubs at the current location of the gardener.
+        
+        ## Libraries
+        This game uses tkinter to render a GUI window so you can play the game.
+        PIL is also used to help with image handling. 
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6

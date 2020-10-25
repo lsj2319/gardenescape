@@ -9,20 +9,10 @@ Garden Escape: A relaxing time in a garden
 """
 
 import tkinter
-from _ast import Lambda
-from simpleimage import SimpleImage
-from tkinter import messagebox
-from tkinter import Label
-from tkinter import font
-from tkinter import Frame
 from tkinter import Button
-from tkinter import OptionMenu
-from tkinter import simpledialog
 from PIL import ImageTk, Image
-import time
 import random
-import math
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
 
 #constants
 CANVAS_WIDTH = 1000      # Width of drawing canvas in pixels
@@ -30,35 +20,35 @@ CANVAS_HEIGHT = 800     # Height of drawing canvas in pixels
 CANVAS_BACKGROUND = "#51bc82"
 
 def main():
-
+    keyboard = Controller()
     canvas = make_canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Garden Escape")
     #add a default background image
-    image = Image.open("images/bg/garden-bg-02.png")
+    image = Image.open("images/garden-bg-02.png")
     backgroundImage=ImageTk.PhotoImage(image)
     canvas.create_image(10, 10, image=backgroundImage, anchor="nw")
 
-#canvas.bind("<Button-1>", lambda e: plant_flower(e, canvas))
+    #canvas.bind("<Button-1>", lambda e: plant_flower(e, canvas))
     #canvas.bind("<Double-1>", lambda e: plant_shrub(e, canvas))
     canvas.bind("<Motion>", lambda e: mouse_move(e,canvas))
-    #canvas.bind("<space>", lambda e: space_pressed(e,canvas))
+    canvas.bind("<space>", lambda e: space_pressed(e,canvas))
     canvas.focus_set()  # Canvas now has the keyboard focus
     game_heading(canvas)
-    #garden_item(canvas)
+    garden_item(canvas)
    # messagebox.showinfo("Hi", "Hello Gardeners!")
 
     canvas.mainloop()
 
 ########## functions #########
-"""def plant_flower(e, canvas):
+def plant_flower():
     if space_pressed(e,canvas):
-        make_flower(canvas)"""
+        make_flower(canvas)
 # capture mouse motion events and use them
 def mouse_move(e,canvas):
     #x and y coordinates move as mouse does: e.x, #e.y
     #global to prevent tkinter image bug
     global img
     #add gardener charcter image to Canvas and move with mouse
-    img = ImageTk.PhotoImage(file="images/retro-gardener-sm.png")
+    img = ImageTk.PhotoImage(file="../images/retro-gardener-sm.png")
     gardener_img = canvas.create_image(e.x, e.y, image=img)
     #my_label.config(text="Coordinates x:" + str(e.x) + " y:" + str(e.y))
 
@@ -71,7 +61,6 @@ def game_heading(canvas):
     #load the welcome and instruction text for the game
     welcome_text = canvas.create_text(400, 20, text="Welcome to Garden Escape!", fill="#587732", font=("Arial", 20))
     message_text = canvas.create_text(400, 40, text="Use your mouse to move. Left click to plant flowers. double click to plant shrubs.", fill="#5b5b5b")
-"""
 
 def garden_item(canvas):
     selected = tkinter.IntVar()
@@ -86,33 +75,26 @@ def garden_item(canvas):
     #item_label = Label(canvas, text=selected.get())
     item_btn = Button(canvas, text="Choose activity", command=lambda: clicked(selected.get(), canvas))
     item_btn.place(x=850, y=130)
-"""
 
-
-def show(value, canvas):
-    myLabel = Label(canvas, text=clicked_ddn.get()).place(x=100, y=100)
 
 #get the radio button selection
 def clicked(value, canvas):
 
+    #item_label = Label(canvas, text = value)
+    #item_label.place(x=850, y=120)
     if value ==1:
-        #call flower press action which will call make_flower # while value==1:
-        for i in range(20):
-            make_flower(canvas)
-        #plant_flower()
-            p_text = canvas.create_text(400, 70, text="Let's plant flowers!", fill="#f2f1f1", font=("Arial", 16))
+        #call flower press action which will call make_flower
+           while value==1:
+               plant_flower()
+               p_text = canvas.create_text(400, 70, text="Let's plant flowers!", fill="#f2f1f1", font=("Arial", 16))
         # if spacebar is pressed while value is 1, make flower
-
+        #make_flower(canvas)
     elif value == 2:
-        # display different text if rocks were chosen
-        p_text = canvas.create_text(400, 70, text="Let's place rocks!", fill="#f2f1f1", font=("Arial", 16))
-        #make_rock(canvas)
+        make_rock(canvas)
     elif value == 3:
-        p_text = canvas.create_text(400, 70, text="Let's plant shrubs!", fill="#f2f1f1", font=("Arial", 16))
-        #make_shrub(canvas)
+        make_shrub(canvas)
     elif value == 4:
-        p_text = canvas.create_text(400, 70, text="Let's make a garden path", fill="#f2f1f1", font=("Arial", 16))
-        #make_pathway(canvas)
+        make_pathway(canvas)
 
 # make a shrub
 def make_shrub(canvas):
